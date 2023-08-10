@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  database:
+    container_name: FetchFood-Database
+    image: postgres:12.12
+    ports:
+        - 5432:5432
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbpassword
+    networks:
+      - fetchfood-network
+    volumes:
+      - C:\dados\volumes\databases\FetchFood:/var/lib/postgresql/data
+  administration:
+    container_name: FetchFood-DBA-Portal
+    image: dpage/pgadmin4:7.4
+    ports:
+        - 8090:80
+    environment:
+        PGADMIN_DEFAULT_EMAIL: admin@fetchfood.com
+        PGADMIN_DEFAULT_PASSWORD: adminpass
+    networks:
+        - fetchfood-network
+    depends_on:
+        - database
+    volumes:
+        - C:\dados\volumes\databases\POSTGRES\pgdmin:/var/lib/pgadmin
+networks:
+  fetchfood-network:
+    driver: bridge
